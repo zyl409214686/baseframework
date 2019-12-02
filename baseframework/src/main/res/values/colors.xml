@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="white_30">#4Dffffff</color>
+
+    <color name="black_02">#021C31</color>
+    <color name="black_50">#515060</color>
+    <color name="black_505">#505160</color>
+    <color name="black_0E_70">#B30E0F11</color>
+
+    <color name="gray_02_10">#1a021C31</color>
+    <color name="gray_6602">#66021C31</color>
+    <color name="gray_ee">#eeeeee</color>
+    <color name="ripple_gray_eb">#EBEDF0</color>
+
+</resources>

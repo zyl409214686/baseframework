@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BaseFramework</string>
+
+    <string name="form_qr1">Album</string>
+    <string name="head_skip">skip</string>
+    <string name="loading">loading...</string>
+
+</resources>
