@@ -1,8 +1,6 @@
 package com.quickdev.baseframework.base;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,16 +10,14 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-
 import com.quickdev.baseframework.R;
 import com.quickdev.baseframework.base.interfaces.OnBackground;
 import com.quickdev.baseframework.base.interfaces.OnHeaderClickListener;
 import com.quickdev.baseframework.base.interfaces.OnMainThread;
+import com.quickdev.baseframework.base.view.HeaderLayout;
 import com.quickdev.baseframework.base.view.LoadingDialog;
-import com.quickdev.baseframework.utils.LogUtils;
 import com.quickdev.baseframework.utils.StatusBarUtils;
 import com.quickdev.baseframework.utils.ThreadPoolManager;
-import com.quickdev.baseframework.base.view.HeaderLayout;
 import com.quickdev.baseframework.utils.TypeUtil;
 
 import butterknife.ButterKnife;
@@ -484,71 +480,30 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         return loadingDialog;
     }
 
-    /**
-     * 弹出正在加载...对话框。
-     */
-    protected void showLoadingDialog(String text) {
+    @Override
+    public void showLoadingDialog(String text) {
+        showLoadingDialog(text, true);
+    }
+
+    @Override
+    public void showLoadingDialog(String text, boolean isCancelable) {
         if (loadingDialog == null || loadingDialog.getContext() != mContext) {
             loadingDialog = new LoadingDialog(mContext);
         }
         try {
+            if (!isCancelable) {
+                loadingDialog.setCanceledOnTouchOutside(false);
+            }
             loadingDialog.show(text);
         } catch (WindowManager.BadTokenException e) {
-            //use a log message
         }
     }
 
-    protected void dismissLoadingDialog() {
+    @Override
+    public void dismissLoadingDialog() {
         if (null != loadingDialog) {
             loadingDialog.dismiss();
         }
-    }
-
-    @Override
-    public void showLoading(String dialogs) {
-        showLoadingDialog(dialogs);
-    }
-
-    @Override
-    public void dismissLoading() {
-        dismissLoadingDialog();
-    }
-
-    @Override
-    public void go(Class clazz) {
-        Intent intent = new Intent(this, clazz);
-        startActivity(intent);
-    }
-
-    @Override
-    public void go(Class clazz, Bundle bundle) {
-        Intent intent = new Intent(this, clazz);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
-    @Override
-    public void go(Intent intent) {
-        startActivity(intent);
-    }
-
-    @Override
-    public void goForResult(Class clazz, int requestCode) {
-        Intent intent = new Intent(this, clazz);
-        startActivityForResult(intent, requestCode);
-    }
-
-    @SuppressLint("RestrictedApi")
-    @Override
-    public void goForResult(Class clazz, int requestCode, Bundle bundle) {
-        Intent intent = new Intent(this, clazz);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, requestCode, bundle);
-    }
-
-    @Override
-    public void exit() {
-        finish();
     }
 
     @Override
@@ -559,28 +514,6 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
             mPresenter.onDestroy();
             mPresenter = null;
         }
-    }
-
-    @Override
-    public void goForResult(Intent intent, int requestCode) {
-        startActivityForResult(intent, requestCode);
-    }
-
-    @Override
-    public void go(Intent intent, Class clazz) {
-        intent.setClass(this, clazz);
-        startActivity(intent);
-    }
-
-    @Override
-    public void goForResult(Intent intent, Class clazz, int requestCode) {
-        intent.setClass(this, clazz);
-        startActivityForResult(intent, requestCode);
-    }
-
-    @Override
-    public void noCancleDialog(boolean b) {
-        loadingDialog.setCanceledOnTouchOutside(b);
     }
 
     @Override

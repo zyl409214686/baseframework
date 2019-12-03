@@ -38,7 +38,7 @@ public class HeaderLayout extends RelativeLayout {
     private static final int TYPE_BLUE_HEADER = 6;
 
     private OnHeaderClickListener mListener;
-//    private ProgressHolder progressHolder;
+    private ProgressHolder progressHolder;
     private HeaderHolder headerHolder;
     private int statusBarHeight;
 
@@ -103,7 +103,7 @@ public class HeaderLayout extends RelativeLayout {
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
         if (progressPageView != null) {
-//            params.addRule(RelativeLayout.BELOW, R.id.root_progress_page);
+            params.addRule(RelativeLayout.BELOW, R.id.root_progress_page);
         } else {
             params.addRule(RelativeLayout.BELOW, R.id.root_header_bar);
         }
@@ -130,8 +130,8 @@ public class HeaderLayout extends RelativeLayout {
     }
 
     protected void addProgressPage() {
-//        progressPageView = layoutInflater.inflate(R.layout.progress_page, null);
-//        progressHolder = new ProgressHolder(progressPageView);
+        progressPageView = layoutInflater.inflate(R.layout.progress_page, null);
+        progressHolder = new ProgressHolder(progressPageView);
         progressPageView.setOnClickListener(onClicker);
         LayoutParams params = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -514,34 +514,34 @@ public class HeaderLayout extends RelativeLayout {
         return headerHolder;
     }
 
-//    static class ProgressHolder extends BaseHolder {
-//        @BindView(R2.id.loadingview)
-//        ImageView loadingView;
-//        @BindView(R2.id.iv_loaderror)
-//        ImageView ivLoaderror;
-//        @BindView(R2.id.tv_loading)
-//        TextView tvLoading;
-//        @BindView(R2.id.ll_dialog)
-//        LinearLayout llDialog;
-//        @BindView(R2.id.rl_loading)
-//        RelativeLayout rlLoading;
-//        @BindView(R2.id.iv_nodata)
-//        ImageView ivNodata;
-//        @BindView(R2.id.tv_msg)
-//        TextView tvMsg;
-//        @BindView(R2.id.tv_reload)
-//        TextView tvReload;
-//        @BindView(R2.id.rl_nodata)
-//        RelativeLayout rlNodata;
-//        @BindView(R2.id.rl_reload)
-//        RelativeLayout rlReload;
-//        @BindView(R2.id.bt_loadding)
-//        ImageView btLoadding;
-//
-//        ProgressHolder(View view) {
-//            super(view);
-//        }
-//    }
+    static class ProgressHolder extends BaseHolder {
+        @BindView(R2.id.loadingview)
+        ImageView loadingView;
+        @BindView(R2.id.iv_loaderror)
+        ImageView ivLoaderror;
+        @BindView(R2.id.tv_loading)
+        TextView tvLoading;
+        @BindView(R2.id.ll_dialog)
+        LinearLayout llDialog;
+        @BindView(R2.id.rl_loading)
+        RelativeLayout rlLoading;
+        @BindView(R2.id.iv_nodata)
+        ImageView ivNodata;
+        @BindView(R2.id.tv_msg)
+        TextView tvMsg;
+        @BindView(R2.id.tv_reload)
+        TextView tvReload;
+        @BindView(R2.id.rl_nodata)
+        RelativeLayout rlNodata;
+        @BindView(R2.id.rl_reload)
+        RelativeLayout rlReload;
+        @BindView(R2.id.bt_loadding)
+        ImageView btLoadding;
+
+        ProgressHolder(View view) {
+            super(view);
+        }
+    }
 
     public class HeaderHolder extends BaseHolder {
         @BindView(R2.id.iv_common_left)

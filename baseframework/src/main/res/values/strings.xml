@@ -4,5 +4,7 @@
     <string name="form_qr1">Album</string>
     <string name="head_skip">skip</string>
     <string name="loading">loading...</string>
+    <string name="net_error">unstable network connection</string>
+    <string name="reload">Reload</string>
 
 </resources>
