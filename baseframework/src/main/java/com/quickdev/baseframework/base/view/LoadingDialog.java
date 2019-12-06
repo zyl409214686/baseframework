@@ -23,7 +23,7 @@ public class LoadingDialog {
         View v = LayoutInflater.from(context).inflate(R.layout.dialog_loading, null);
         iv_loading = (ImageView) v.findViewById(R.id.iv_loading);
         tv = (TextView) v.findViewById(R.id.tv_loading);
-        dialog = new Dialog(context, R.style.loading_dialog);
+        dialog = new Dialog(context, R.style.base_dialog);
         dialog.setContentView(v);
     }
 
