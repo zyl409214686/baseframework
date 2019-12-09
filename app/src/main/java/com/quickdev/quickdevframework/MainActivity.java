@@ -19,6 +19,7 @@ public class MainActivity extends BaseActivity<BasePresenter, BaseModel> {
     protected void setLayout() {
         setView(R.layout.activity_main, TYPE_HEADER);
         setHeaderBar("hello world");
+        showLoadingDialog();
     }
 
     @Override

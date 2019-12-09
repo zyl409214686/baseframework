@@ -11,11 +11,13 @@ public interface BaseView {
 
     Context getIContext();
 
+    void showLoadingDialog();
+
     void showLoadingDialog(String dialogs);
 
-    void dismissLoadingDialog();
-
     void showLoadingDialog(String text, boolean isCancelable);
+
+    void dismissLoadingDialog();
 
     /*
      * 统一添加数据展示相关界面
@@ -38,9 +40,7 @@ public interface BaseView {
 
     void hideLoadingPageDialog();
 
-    void setEmptyView(int layoutResId, ViewGroup viewGroup);
-
     void runOnUIThread(OnMainThread onMainThread);
 
-    void runOnThreeThread(OnBackground onBackground);
+    void runOnWorkThread(OnBackground onBackground);
 }

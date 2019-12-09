@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -27,7 +26,7 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel> extends AppCompatActivity implements BaseView {
     protected Context mContext;
     private HeaderLayout headerLayout;
-    protected LoadingDialog loadingDialog;
+    protected LoadingDialog mLoadingDialog;
     protected static final int TYPE_NORMAL = 0; //什么都没有
     protected static final int TYPE_HEADER = 1;//有头
     protected static final int TYPE_PROGRESS = 2;//有加载动画
@@ -362,15 +361,6 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     }
 
     /**
-     * 隐藏左边箭头
-     */
-    public void hideHeaderLeftArrow() {
-        if (null != headerLayout) {
-//            headerLayout.hideHeaderLeftArrow();
-        }
-    }
-
-    /**
      * 隐藏左边按钮
      */
     public void hideHeaderLeftButton() {
@@ -465,19 +455,9 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     /**
      * 弹出"正在加载..."对话框。
      */
-    protected void showLoadingDialog() {
-        if (loadingDialog == null || loadingDialog.getContext() != mContext) {
-            loadingDialog = new LoadingDialog(mContext);
-        }
-        try {
-            loadingDialog.show(getString(R.string.loading));
-        } catch (WindowManager.BadTokenException e) {
-            //use a log message
-        }
-    }
-
-    public LoadingDialog getLoadingDialog() {
-        return loadingDialog;
+    @Override
+    public void showLoadingDialog() {
+        showLoadingDialog(getString(R.string.loading), true);
     }
 
     @Override
@@ -486,23 +466,22 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     }
 
     @Override
-    public void showLoadingDialog(String text, boolean isCancelable) {
-        if (loadingDialog == null || loadingDialog.getContext() != mContext) {
-            loadingDialog = new LoadingDialog(mContext);
+    public void showLoadingDialog(String text, boolean canceldOnTouchOutside) {
+        if (mLoadingDialog == null || mLoadingDialog.getContext() != mContext) {
+            mLoadingDialog = new LoadingDialog(mContext);
+            mLoadingDialog.setCanceledOnTouchOutside(canceldOnTouchOutside);
         }
         try {
-            if (!isCancelable) {
-                loadingDialog.setCanceledOnTouchOutside(false);
-            }
-            loadingDialog.show(text);
+            mLoadingDialog.show(text);
         } catch (WindowManager.BadTokenException e) {
+            //use a log message
         }
     }
 
     @Override
     public void dismissLoadingDialog() {
-        if (null != loadingDialog) {
-            loadingDialog.dismiss();
+        if (null != mLoadingDialog) {
+            mLoadingDialog.dismiss();
         }
     }
 
@@ -522,11 +501,6 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     }
 
     @Override
-    public void setEmptyView(int layoutResId, ViewGroup viewGroup) {
-
-    }
-
-    @Override
     public void runOnUIThread(OnMainThread onMainThread) {
         runOnUiThread(() -> {
             if (onMainThread != null) onMainThread.doInUIThread();
@@ -534,7 +508,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     }
 
     @Override
-    public void runOnThreeThread(OnBackground onBackground) {
+    public void runOnWorkThread(OnBackground onBackground) {
         ThreadPoolManager.newInstance().addExecuteTask(() -> {
             if (onBackground != null) onBackground.doOnBackground();
         }, true);
