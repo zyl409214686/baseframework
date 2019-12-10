@@ -27,13 +27,18 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     protected Context mContext;
     private HeaderLayout headerLayout;
     protected LoadingDialog mLoadingDialog;
-    protected static final int TYPE_NORMAL = 0; //什么都没有
-    protected static final int TYPE_HEADER = 1;//有头
-    protected static final int TYPE_PROGRESS = 2;//有加载动画
-    protected static final int TYPE_HEADER_PROGRESS = 3;//有头有加载动画
-    protected static final int TYPE_NOHEADER_STATUABAR = 4;//无头有bar
-    protected static final int TYPE_NOHEADER_STATUABAR_LIGHT = 5;//无头有bar 白色字体
-    protected static final int TYPE_BLUE_HEADER = 6;//沉浸式 蓝色背景头部
+
+    public enum HEADER_TYPE {
+        TYPE_NORMAL,//什么都没有
+        TYPE_HEADER,//有头
+        TYPE_PROGRESS,//有加载动画
+        TYPE_HEADER_PROGRESS,//有头有加载动画
+        TYPE_NOHEADER_STATUABAR,//无头有bar
+        TYPE_NOHEADER_STATUABAR_LIGHT,//无头有bar 白色字体
+        TYPE_BLUE_HEADER,//沉浸式 蓝色背景头部
+    }
+
+    ;
 
     public T mPresenter;
     public E mModel;
@@ -41,10 +46,6 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     protected BaseActivity() {
         mContext = this;
     }
-
-    protected abstract void setLayout();
-
-    protected abstract void processData();
 
     @SuppressWarnings("unchecked")
     @Override
@@ -58,24 +59,36 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
             window.setStatusBarColor(Color.TRANSPARENT);
         }
         super.onCreate(savedInstanceState);
-        onCreate1(savedInstanceState);
         mContext = this;
-        setLayout();
+        setContentViewBefore(savedInstanceState);
+        setContentView();
         ButterKnife.bind(this);
+        initMvp();
+        StatusBarUtils.setLightStatusBar(this, true);
+        setContentViewAfter(savedInstanceState);
+    }
+
+    private void setContentView() {
+        int layoutResId = getLayoutResId();
+        if (layoutResId != 0) {
+            setContentView(layoutResId, getHeaderType());
+        }
+    }
+
+    protected abstract int getLayoutResId();
+
+    protected abstract HEADER_TYPE getHeaderType();
+
+    private void initMvp() {
         mPresenter = TypeUtil.getT(this, 0);
         mModel = TypeUtil.getT(this, 1);
         if (this instanceof BaseView && mPresenter != null) mPresenter.setVM(this, mModel);
-        StatusBarUtils.setLightStatusBar(this, true);
-        onCreate2(savedInstanceState);
-        processData();
-//        PushAgent.getInstance(this).onAppStart();
     }
 
-    public void onCreate2(Bundle savedInstanceState) {
-    }
 
-    public void onCreate1(Bundle savedInstanceState) {
-    }
+    protected abstract void setContentViewAfter(Bundle savedInstanceState);
+
+    protected abstract void setContentViewBefore(Bundle savedInstanceState);
 
 
     @Override
@@ -88,7 +101,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         super.onPause();
     }
 
-    protected void setView(int layoutResId, int type) {
+    protected void setContentView(int layoutResId, HEADER_TYPE type) {
         switch (type) {
             case TYPE_NORMAL:
                 setContentView(layoutResId);

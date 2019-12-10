@@ -1,5 +1,6 @@
 package com.quickdev.quickdevframework;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
@@ -10,20 +11,18 @@ import com.quickdev.baseframework.base.BasePresenter;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.quickdev.baseframework.base.BaseActivity.HEADER_TYPE.TYPE_HEADER;
+
 
 public class MainActivity extends BaseActivity<BasePresenter, BaseModel> {
     private TestDialog mTestDialog;
     @BindView(R.id.bt_test)
     Button mTestBtn;
-    @Override
-    protected void setLayout() {
-        setView(R.layout.activity_main, TYPE_HEADER);
-        setHeaderBar("hello world");
-        showLoadingDialog();
-    }
 
     @Override
-    protected void processData() {
+    public void setContentViewAfter(Bundle savedInstanceState) {
+        setHeaderBar("hello world");
+        showLoadingDialog();
         mTestDialog = new TestDialog();
         mTestDialog.setShowBottomEnable(false);
         mTestBtn.setOnClickListener(new View.OnClickListener() {
@@ -32,6 +31,21 @@ public class MainActivity extends BaseActivity<BasePresenter, BaseModel> {
                 mTestDialog.show(getSupportFragmentManager(), "testdialog");
             }
         });
+    }
+
+    @Override
+    protected void setContentViewBefore(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected HEADER_TYPE getHeaderType() {
+        return TYPE_HEADER;
     }
 
     @Override

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.quickdev.baseframework.R;
 import com.quickdev.baseframework.R2;
+import com.quickdev.baseframework.base.BaseActivity;
 import com.quickdev.baseframework.base.BaseHolder;
 import com.quickdev.baseframework.base.interfaces.OnHeaderClickListener;
 import com.quickdev.baseframework.utils.AppContextUtil;
@@ -42,14 +43,14 @@ public class HeaderLayout extends RelativeLayout {
     private HeaderHolder headerHolder;
     private int statusBarHeight;
 
-    public HeaderLayout(Context context, int layoutResourceId, int type) {
+    public HeaderLayout(Context context, int layoutResourceId, BaseActivity.HEADER_TYPE type) {
         super(context);
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         statusBarHeight = getStatusBarHeight(context);
         setHeaderLayout(context, layoutResourceId, type);
     }
 
-    public HeaderLayout(Context context, LayoutInflater inflater, int layoutResourceId, int type) {
+    public HeaderLayout(Context context, LayoutInflater inflater, int layoutResourceId, BaseActivity.HEADER_TYPE type) {
         super(context);
         layoutInflater = inflater;
         statusBarHeight = getStatusBarHeight(context);
@@ -66,8 +67,8 @@ public class HeaderLayout extends RelativeLayout {
     }
 
 
-    private void setHeaderLayout(Context context, int layoutResourceId, int type) {
-        switch (type) {
+    private void setHeaderLayout(Context context, int layoutResourceId, BaseActivity.HEADER_TYPE type) {
+        switch (type.ordinal()) {
             case TYPE_PROGRESS:
                 addProgressPage();
                 break;
