@@ -3,10 +3,16 @@ package com.quickdev.quickdevframework;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.quickdev.baseframework.base.BaseActivity;
 import com.quickdev.baseframework.base.BaseModel;
 import com.quickdev.baseframework.base.BasePresenter;
+import com.quickdev.baseframework.bean.EventMessage;
+import com.quickdev.baseframework.utils.EventBusUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,7 +60,7 @@ public class MainActivity extends BaseActivity<BasePresenter, BaseModel> {
         finish();
     }
 
-    @OnClick(R.id.bt_test)
+    @OnClick({R.id.bt_test, R.id.bt_eventbus})
     public void onClickView(View view) {
         switch (view.getId()){
             case R.id.bt_test:
@@ -64,6 +70,21 @@ public class MainActivity extends BaseActivity<BasePresenter, BaseModel> {
                     mTestDialog.dismiss();
                 }
                 break;
+            case R.id.bt_eventbus:
+                EventBusUtils.post(new EventMessage<>(EventMessageConstants.EVENT_A, "EventData"));
+                break;
+        }
+    }
+
+    @Override
+    protected boolean isRegisteredEventBus() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onReceiveStickyEvent(EventMessage event) {
+        if(event.getCode() == EventMessageConstants.EVENT_A){
+            Toast.makeText(mContext, "receive EVENT_A evnet and currentThread is:"+Thread.currentThread().getName(), Toast.LENGTH_SHORT).show();
         }
     }
 }

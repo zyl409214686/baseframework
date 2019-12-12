@@ -15,9 +15,12 @@ import com.quickdev.baseframework.base.interfaces.OnHeaderClickListener;
 import com.quickdev.baseframework.base.interfaces.OnMainThread;
 import com.quickdev.baseframework.base.view.HeaderLayout;
 import com.quickdev.baseframework.base.view.LoadingDialog;
+import com.quickdev.baseframework.utils.EventBusUtils;
 import com.quickdev.baseframework.utils.StatusBarUtils;
 import com.quickdev.baseframework.utils.ThreadPoolManager;
 import com.quickdev.baseframework.utils.TypeUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.ButterKnife;
 
@@ -37,8 +40,6 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         TYPE_NOHEADER_STATUABAR_LIGHT,//无头有bar 白色字体
         TYPE_BLUE_HEADER,//沉浸式 蓝色背景头部
     }
-
-    ;
 
     public T mPresenter;
     public E mModel;
@@ -62,10 +63,14 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         mContext = this;
         setContentViewBefore(savedInstanceState);
         setContentView();
+        init();
+        setContentViewAfter(savedInstanceState);
+    }
+
+    private void init() {
         ButterKnife.bind(this);
         initMvp();
         StatusBarUtils.setLightStatusBar(this, true);
-        setContentViewAfter(savedInstanceState);
     }
 
     private void setContentView() {
@@ -75,20 +80,39 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         }
     }
 
-    protected abstract int getLayoutResId();
-
-    protected abstract HEADER_TYPE getHeaderType();
-
     private void initMvp() {
         mPresenter = TypeUtil.getT(this, 0);
         mModel = TypeUtil.getT(this, 1);
         if (this instanceof BaseView && mPresenter != null) mPresenter.setVM(this, mModel);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(isRegisteredEventBus())
+            EventBusUtils.register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(isRegisteredEventBus())
+            EventBusUtils.unregister(this);
+    }
+
+    protected abstract int getLayoutResId();
+
+    protected abstract HEADER_TYPE getHeaderType();
+
+    protected boolean isRegisteredEventBus() {
+        return false;
+    }
 
     protected abstract void setContentViewAfter(Bundle savedInstanceState);
 
-    protected abstract void setContentViewBefore(Bundle savedInstanceState);
+    protected void setContentViewBefore(Bundle savedInstanceState){
+
+    }
 
 
     @Override
