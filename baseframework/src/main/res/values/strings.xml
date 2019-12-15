@@ -6,5 +6,7 @@
     <string name="loading">loading...</string>
     <string name="net_error">unstable network connection</string>
     <string name="reload">Reload</string>
+    <string name="nodata">No data</string>
+
 
 </resources>

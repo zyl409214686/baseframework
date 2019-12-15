@@ -64,7 +64,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
             mContentViewId = getContentLayoutId();
             mView = inflater.inflate(mContentViewId, container, false);
         }
-        // convertView(BaseHolder,this);
+        // convertView(BaseRecyclerViewHolder,this);
         unbinder = ButterKnife.bind(this, mView);
         return mView;
     }

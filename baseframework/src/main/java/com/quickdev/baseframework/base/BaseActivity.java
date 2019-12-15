@@ -20,15 +20,13 @@ import com.quickdev.baseframework.utils.StatusBarUtils;
 import com.quickdev.baseframework.utils.ThreadPoolManager;
 import com.quickdev.baseframework.utils.TypeUtil;
 
-import org.greenrobot.eventbus.EventBus;
-
 import butterknife.ButterKnife;
 
 //import com.umeng.message.PushAgent;
 
 public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel> extends AppCompatActivity implements BaseView {
     protected Context mContext;
-    private HeaderLayout headerLayout;
+    private HeaderLayout mHeaderLayout;
     protected LoadingDialog mLoadingDialog;
 
     public enum HEADER_TYPE {
@@ -131,51 +129,51 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
                 setContentView(layoutResId);
                 break;
             default:
-                headerLayout = new HeaderLayout(this, layoutResId, type);
-                setContentView(headerLayout);
+                mHeaderLayout = new HeaderLayout(this, layoutResId, type);
+                setContentView(mHeaderLayout);
                 break;
         }
-        if (null != headerLayout) {
-            headerLayout.setHeaderClickListener(onHeaderClickListener);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setHeaderClickListener(onHeaderClickListener);
         }
     }
 
     public void setTitle(String title) {
-        if (null != headerLayout) {
-            headerLayout.setTitle(title);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setTitle(title);
         }
     }
 
     public void setMiddleTtitle(String title) {
-        if (null != headerLayout) {
-            headerLayout.setMiddleTitle(title);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setMiddleTitle(title);
         }
     }
 
     public void setRightBold() {
-        if (null != headerLayout) {
-            headerLayout.setRightBold();
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setRightBold();
         }
     }
 
     public void setCommonTitle2(String text) {
-        if (null != headerLayout) {
-            headerLayout.setCommonTitle2(text);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setCommonTitle2(text);
         }
     }
 
     public void setCommonRight2(String text) {
-        if (null != headerLayout) {
-            headerLayout.setCommonRightTitle2(text);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setCommonRightTitle2(text);
         }
     }
 
     public void showOrHideHeader(boolean isShow) {
-        if (headerLayout == null) return;
+        if (mHeaderLayout == null) return;
         if (isShow)
-            headerLayout.showOrHideHeader(true);
+            mHeaderLayout.showOrHideHeader(true);
         else
-            headerLayout.showOrHideHeader(false);
+            mHeaderLayout.showOrHideHeader(false);
     }
 
     private OnHeaderClickListener onHeaderClickListener = new OnHeaderClickListener() {
@@ -245,8 +243,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param titleText
      */
     public void setHeaderBar(String titleText) {
-        if (null != headerLayout) {
-            headerLayout.setHeaderBar(titleText);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setmHeaderBar(titleText);
         }
     }
 
@@ -256,8 +254,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param res
      */
     public void setRefreshBar(int res) {
-        if (null != headerLayout) {
-            headerLayout.setRightBar(res);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setRightBar(res);
         }
     }
 
@@ -269,8 +267,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param rightContent
      */
     public void setHeaderBarAndRightTv(String title, String rightContent) {
-        if (null != headerLayout) {
-            headerLayout.setHeaderBarAndRightTv(title, rightContent);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setHeaderBarAndRightTv(title, rightContent);
         }
     }
 
@@ -280,8 +278,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param isShow
      */
     public void setRightTextShow(boolean isShow) {
-        if (null != headerLayout) {
-            headerLayout.setRightTextShow(isShow);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setRightTextShow(isShow);
         }
     }
 
@@ -291,8 +289,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param res
      */
     public void setCloseBar(int res) {
-        if (null != headerLayout) {
-            headerLayout.setLeftBar(res);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setLeftBar(res);
         }
     }
 
@@ -303,8 +301,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param titleText
      */
     public void setHeaderBarAndRight(String titleText) {
-        if (null != headerLayout) {
-            headerLayout.setHeaderBar(titleText, "");
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setHeaderBar(titleText, "");
         }
     }
 
@@ -314,8 +312,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param titleText
      */
     public void setHeaderBarAndRightImage(String titleText) {
-        if (null != headerLayout) {
-            headerLayout.setHeaderBar(titleText, 0);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setHeaderBar(titleText, 0);
         }
     }
 
@@ -326,8 +324,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param titleText
      */
     public void setHeaderBarAndRightImage(String titleText, int res) {
-        if (null != headerLayout) {
-            headerLayout.setHeaderBar(titleText, res);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setHeaderBar(titleText, res);
         }
     }
 
@@ -337,8 +335,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param titleText
      */
     public void setHeaderBarAndRightImageSpe(String titleText, int res) {
-        if (null != headerLayout) {
-            headerLayout.setHeaderBarSpe(titleText, res);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setHeaderBarSpe(titleText, res);
         }
     }
 
@@ -350,8 +348,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param rightText
      */
     public void setHeaderBar(String titleText, String rightText) {
-        if (null != headerLayout) {
-            headerLayout.setHeaderBar(titleText, rightText);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setHeaderBar(titleText, rightText);
         }
     }
 
@@ -362,8 +360,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param rightText
      */
     public void setWhiteHeaderBar(String titleText, String rightText) {
-        if (null != headerLayout) {
-            headerLayout.setHeaderBar(titleText, rightText);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setHeaderBar(titleText, rightText);
         }
     }
 
@@ -376,8 +374,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param rightText
      */
     public void setHeaderBar(String leftText, String titleText, String rightText) {
-        if (null != headerLayout) {
-            headerLayout.setHeaderBar(leftText, titleText, rightText);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.setHeaderBar(leftText, titleText, rightText);
         }
     }
 
@@ -385,8 +383,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * 获取headerBar
      */
     public View getHeaderBar() {
-        if (null != headerLayout)
-            return headerLayout.getHeadBar();
+        if (null != mHeaderLayout)
+            return mHeaderLayout.getHeadBar();
         return null;
     }
 
@@ -394,15 +392,15 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * 获取HeaderHolder
      */
     public HeaderLayout.HeaderHolder getHeaderHolder() {
-        return headerLayout.getHeaderHolder();
+        return mHeaderLayout.getHeaderHolder();
     }
 
     /**
      * 隐藏左边按钮
      */
     public void hideHeaderLeftButton() {
-        if (null != headerLayout) {
-            headerLayout.hideHeaderLeftButton();
+        if (null != mHeaderLayout) {
+            mHeaderLayout.hideHeaderLeftButton();
         }
     }
 
@@ -410,8 +408,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * 展示正在加载...
      */
     public void showLoadingPage() {
-        if (null != headerLayout) {
-            headerLayout.showLoadingPage();
+        if (null != mHeaderLayout) {
+            mHeaderLayout.showLoadingPage();
         }
     }
 
@@ -421,14 +419,14 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param loadingText
      */
     public void showLoadingPage(String loadingText) {
-        if (null != headerLayout) {
-            headerLayout.showLoadingPage(loadingText);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.showLoadingPage(loadingText);
         }
     }
 
     public void hideLoadingPageDialog() {
-        if (null != headerLayout) {
-            headerLayout.hideLoadingPageDialog();
+        if (null != mHeaderLayout) {
+            mHeaderLayout.hideLoadingPageDialog();
         }
     }
 
@@ -436,8 +434,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * 加载成功，隐藏加载页
      */
     public void dismissLoadingPage() {
-        if (null != headerLayout) {
-            headerLayout.dismissLoadingPage();
+        if (null != mHeaderLayout) {
+            mHeaderLayout.dismissLoadingPage();
         }
     }
 
@@ -445,20 +443,20 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * 网络异常，展示重新加载按钮。
      */
     public void showErrorPage() {
-        if (null != headerLayout) {
-            headerLayout.showErrorPage();
+        if (null != mHeaderLayout) {
+            mHeaderLayout.showErrorPage();
         }
     }
 
     public void showErrorPage(String errorText) {
-        if (null != headerLayout) {
-            headerLayout.showErrorPage(0, errorText);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.showErrorPage(0, errorText);
         }
     }
 
     public void showErrorPage(int imgResID, String errorText) {
-        if (null != headerLayout) {
-            headerLayout.showErrorPage(imgResID, errorText);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.showErrorPage(imgResID, errorText);
         }
     }
 
@@ -466,15 +464,15 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * 返回无数据，展示未找到相关数据
      */
     public void showNoDatasPage() {
-        if (null != headerLayout) {
-            headerLayout.showNoDatasPage();
+        if (null != mHeaderLayout) {
+            mHeaderLayout.showNoDatasPage();
         }
     }
 
 
     public void showNoDatasPage(String noDatasText) {
-        if (null != headerLayout) {
-            headerLayout.showNoDatasPage(0, noDatasText);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.showNoDatasPage(0, noDatasText);
         }
     }
 
@@ -484,8 +482,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      * @param noDatasText
      */
     public void showNoDatasPage(int imgResID, String noDatasText) {
-        if (null != headerLayout) {
-            headerLayout.showNoDatasPage(imgResID, noDatasText);
+        if (null != mHeaderLayout) {
+            mHeaderLayout.showNoDatasPage(imgResID, noDatasText);
         }
     }
 
@@ -526,6 +524,9 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     protected void onDestroy() {
         super.onDestroy();
         dismissLoadingDialog();
+        if(mHeaderLayout!=null) {
+            mHeaderLayout.onDestory();
+        }
         if (null != mPresenter) {
             mPresenter.onDestroy();
             mPresenter = null;

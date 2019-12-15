@@ -17,9 +17,10 @@ import android.widget.TextView;
 import com.quickdev.baseframework.R;
 import com.quickdev.baseframework.R2;
 import com.quickdev.baseframework.base.BaseActivity;
-import com.quickdev.baseframework.base.BaseHolder;
+import com.quickdev.baseframework.base.BaseViewHolder;
 import com.quickdev.baseframework.base.interfaces.OnHeaderClickListener;
 import com.quickdev.baseframework.utils.AppContextUtil;
+import com.quickdev.baseframework.utils.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -27,10 +28,10 @@ import butterknife.OnClick;
 
 public class HeaderLayout extends RelativeLayout {
 
-    private View headerBar;
-    private View progressPageView;
+    private View mHeaderBar;
+    private View mProgressPageView;
 
-    private LayoutInflater layoutInflater;
+    private LayoutInflater mLayoutInflater;
     private static final int TYPE_HEADER = 1;
     private static final int TYPE_PROGRESS = 2;
     private static final int TYPE_HEADER_PROGRESS = 3;
@@ -39,21 +40,21 @@ public class HeaderLayout extends RelativeLayout {
     private static final int TYPE_BLUE_HEADER = 6;
 
     private OnHeaderClickListener mListener;
-    private ProgressHolder progressHolder;
-    private HeaderHolder headerHolder;
-    private int statusBarHeight;
+    private ProgressHolder mProgressHolder;
+    private HeaderHolder mHeaderHolder;
+    private int mStatusBarHeight;
 
     public HeaderLayout(Context context, int layoutResourceId, BaseActivity.HEADER_TYPE type) {
         super(context);
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        statusBarHeight = getStatusBarHeight(context);
+        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mStatusBarHeight = getStatusBarHeight(context);
         setHeaderLayout(context, layoutResourceId, type);
     }
 
     public HeaderLayout(Context context, LayoutInflater inflater, int layoutResourceId, BaseActivity.HEADER_TYPE type) {
         super(context);
-        layoutInflater = inflater;
-        statusBarHeight = getStatusBarHeight(context);
+        mLayoutInflater = inflater;
+        mStatusBarHeight = getStatusBarHeight(context);
         setHeaderLayout(context, layoutResourceId, type);
     }
 
@@ -81,29 +82,29 @@ public class HeaderLayout extends RelativeLayout {
                 break;
             case TYPE_NOHEADER_STATUSBAR:
                 addHeaderBar();
-                headerHolder.backview.setVisibility(GONE);
+                mHeaderHolder.backview.setVisibility(GONE);
                 break;
             case TYPE_NOHEADER_STATUSBAR_PROGRESS:
                 addHeaderBar();
-                headerHolder.backview.setVisibility(GONE);
+                mHeaderHolder.backview.setVisibility(GONE);
                 addProgressPage();
                 break;
             case TYPE_BLUE_HEADER:
                 addHeaderBar();
-                headerHolder.statusbar.setVisibility(INVISIBLE);
-//                headerHolder.view.setBackgroundResource(R.mipmap-xxhdpi.header_top_bg);
-//                headerHolder.ivCommonLeft.setBackgroundResource(R.mipmap-xxhdpi.ic_left_white);
-                headerHolder.tvCommonTitle.setTextColor(getResources().getColor(R.color.white));
+                mHeaderHolder.statusbar.setVisibility(INVISIBLE);
+//                mHeaderHolder.parentView.setBackgroundResource(R.mipmap-xxhdpi.header_top_bg);
+//                mHeaderHolder.ivCommonLeft.setBackgroundResource(R.mipmap-xxhdpi.ic_left_white);
+                mHeaderHolder.tvCommonTitle.setTextColor(getResources().getColor(R.color.white));
                 break;
             default:
                 break;
         }
 
-        View view = layoutInflater.inflate(layoutResourceId, null);
+        View view = mLayoutInflater.inflate(layoutResourceId, null);
         LayoutParams params = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
-        if (progressPageView != null) {
+        if (mProgressPageView != null) {
             params.addRule(RelativeLayout.BELOW, R.id.root_progress_page);
         } else {
             params.addRule(RelativeLayout.BELOW, R.id.root_header_bar);
@@ -116,10 +117,10 @@ public class HeaderLayout extends RelativeLayout {
     }
 
     protected void addHeaderBar() {
-        headerBar = layoutInflater.inflate(R.layout.header_bar, null);
-        headerHolder = new HeaderHolder(headerBar);
-        LayoutParams statusParams = new LayoutParams(LayoutParams.MATCH_PARENT, statusBarHeight);
-        headerHolder.statusbar.setLayoutParams(statusParams);
+        mHeaderBar = mLayoutInflater.inflate(R.layout.header_bar, null);
+        mHeaderHolder = new HeaderHolder(mHeaderBar);
+        LayoutParams statusParams = new LayoutParams(LayoutParams.MATCH_PARENT, mStatusBarHeight);
+        mHeaderHolder.statusbar.setLayoutParams(statusParams);
 
         LayoutParams params = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -127,17 +128,17 @@ public class HeaderLayout extends RelativeLayout {
 //        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 
 
-        addView(headerBar, params);
+        addView(mHeaderBar, params);
     }
 
     protected void addProgressPage() {
-        progressPageView = layoutInflater.inflate(R.layout.progress_page, null);
-        progressHolder = new ProgressHolder(progressPageView);
-        progressPageView.setOnClickListener(onClicker);
+        mProgressPageView = mLayoutInflater.inflate(R.layout.progress_page, null);
+        mProgressHolder = new ProgressHolder(mProgressPageView);
+        mProgressPageView.setOnClickListener(onClicker);
         LayoutParams params = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.BELOW, R.id.root_header_bar);
-        addView(progressPageView, params);
+        addView(mProgressPageView, params);
 
         showLoadingPage();
     }
@@ -146,25 +147,25 @@ public class HeaderLayout extends RelativeLayout {
         @Override
         public void onClick(View v) {
             int i = v.getId();
-//            if (i == R.id.root_progress_page) {
-//                if (progressHolder.rlNodata.getVisibility() == VISIBLE && progressHolder.rlReload.getVisibility() == VISIBLE) {
-//                    progressHolder.tvReload.setVisibility(GONE);
-//                    progressHolder.btLoadding.setVisibility(VISIBLE);
-//                    startAnima(progressHolder.btLoadding);
-//                    mListener.onClickReLoadButton();
-//                }
-//
-//            } else {
-//            }
+            if (i == R.id.root_progress_page) {
+                if (mProgressHolder.rlNodata.getVisibility() == VISIBLE && mProgressHolder.rlReload.getVisibility() == VISIBLE) {
+                    mProgressHolder.tvReload.setVisibility(GONE);
+                    mProgressHolder.btLoadding.setVisibility(VISIBLE);
+                    startAnima(mProgressHolder.btLoadding);
+                    mListener.onClickReLoadButton();
+                }
+
+            } else {
+            }
         }
     };
 
     public void showOrHideHeader(boolean isShow) {
-        if (headerHolder == null) return;
+        if (mHeaderHolder == null) return;
         if (isShow)
-            headerHolder.backview.post(() -> headerHolder.backview.setVisibility(VISIBLE));
+            mHeaderHolder.backview.post(() -> mHeaderHolder.backview.setVisibility(VISIBLE));
         else
-            headerHolder.backview.post(() -> headerHolder.backview.setVisibility(GONE));
+            mHeaderHolder.backview.post(() -> mHeaderHolder.backview.setVisibility(GONE));
     }
 
     /**
@@ -172,13 +173,13 @@ public class HeaderLayout extends RelativeLayout {
      *
      * @param titleText
      */
-    public void setHeaderBar(String titleText) {
+    public void setmHeaderBar(String titleText) {
         //显示返回按钮
-        headerHolder.ivCommonLeft.setVisibility(VISIBLE);
-        headerHolder.tvCommonTitle.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setVisibility(GONE);
+        mHeaderHolder.ivCommonLeft.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonTitle.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setVisibility(GONE);
 
-        headerHolder.tvCommonTitle.setText(titleText);
+        mHeaderHolder.tvCommonTitle.setText(titleText);
     }
 
 
@@ -190,18 +191,18 @@ public class HeaderLayout extends RelativeLayout {
      * @param rightText
      */
     public void setHeaderBar(String leftText, String titleText, String rightText) {
-        headerHolder.ivCommonLeft.setVisibility(VISIBLE);
-        headerHolder.tvCommonTitle.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setText(rightText);
-        headerHolder.tvCommonTitle.setText(titleText);
+        mHeaderHolder.ivCommonLeft.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonTitle.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setText(rightText);
+        mHeaderHolder.tvCommonTitle.setText(titleText);
     }
 
     /**
-     * 获取 headerBar
+     * 获取 mHeaderBar
      */
     public View getHeadBar() {
-        return headerBar;
+        return mHeaderBar;
     }
 
     /**
@@ -211,19 +212,19 @@ public class HeaderLayout extends RelativeLayout {
      * @param imageRes  为0 可不传 默认是扫一扫
      */
     public void setHeaderBarSpe(String titleText, int imageRes) {
-        headerHolder.ivCommonLeft.setVisibility(VISIBLE);
-        headerHolder.tvCommonTitle.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setVisibility(VISIBLE);
-        headerHolder.ivQr.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setVisibility(GONE);
+        mHeaderHolder.ivCommonLeft.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonTitle.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setVisibility(VISIBLE);
+        mHeaderHolder.ivQr.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setVisibility(GONE);
         if (imageRes != 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                headerHolder.ivQr.setBackground(null);
+                mHeaderHolder.ivQr.setBackground(null);
             }
-            headerHolder.ivQr.setImageResource(imageRes);
+            mHeaderHolder.ivQr.setImageResource(imageRes);
         }
 
-        headerHolder.tvCommonTitle.setText(titleText);
+        mHeaderHolder.tvCommonTitle.setText(titleText);
     }
 
     /**
@@ -233,19 +234,19 @@ public class HeaderLayout extends RelativeLayout {
      * @param imageRes  为0 可不传 默认是扫一扫
      */
     public void setHeaderBar(String titleText, int imageRes) {
-        headerHolder.rlRight.setVisibility(View.VISIBLE);
-        headerHolder.ivCommonLeft.setVisibility(VISIBLE);
-        headerHolder.tvCommonTitle.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setVisibility(VISIBLE);
-        headerHolder.ivQr.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setVisibility(GONE);
+        mHeaderHolder.rlRight.setVisibility(View.VISIBLE);
+        mHeaderHolder.ivCommonLeft.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonTitle.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setVisibility(VISIBLE);
+        mHeaderHolder.ivQr.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setVisibility(GONE);
         if (imageRes != 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                headerHolder.ivQr.setBackground(null);
+                mHeaderHolder.ivQr.setBackground(null);
             }
-            headerHolder.ivQr.setImageResource(imageRes);
+            mHeaderHolder.ivQr.setImageResource(imageRes);
         }
-        headerHolder.tvCommonTitle.setText(titleText);
+        mHeaderHolder.tvCommonTitle.setText(titleText);
     }
 
 
@@ -255,12 +256,12 @@ public class HeaderLayout extends RelativeLayout {
      * @param imageRes 为0  默认是刷新
      */
     public void setRightBar(int imageRes) {
-        headerHolder.rlIconRight.setVisibility(VISIBLE);
+        mHeaderHolder.rlIconRight.setVisibility(VISIBLE);
         if (imageRes != 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                headerHolder.ivRefresh.setBackground(null);
+                mHeaderHolder.ivRefresh.setBackground(null);
             }
-            headerHolder.ivRefresh.setImageResource(imageRes);
+            mHeaderHolder.ivRefresh.setImageResource(imageRes);
         }
     }
 
@@ -272,21 +273,21 @@ public class HeaderLayout extends RelativeLayout {
      * @param right     为null 可不传 默认是从相册选择
      */
     public void setHeaderBarAndRightTv(String titleText, String right) {
-        headerHolder.ivCommonLeft.setVisibility(VISIBLE);
-        headerHolder.tvCommonTitle.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setVisibility(GONE);
-        headerHolder.ivQr.setVisibility(GONE);
+        mHeaderHolder.ivCommonLeft.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonTitle.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setVisibility(GONE);
+        mHeaderHolder.ivQr.setVisibility(GONE);
 //        if (!StringUtils.isEmpty(right)) {
-//            headerHolder.tvBgRight.setVisibility(VISIBLE);
-//            headerHolder.tvBgRight.setText(right);
+//            mHeaderHolder.tvBgRight.setVisibility(VISIBLE);
+//            mHeaderHolder.tvBgRight.setText(right);
 //        }
 
-        headerHolder.tvCommonTitle.setText(titleText);
+        mHeaderHolder.tvCommonTitle.setText(titleText);
     }
 
 
     public void setRightTextShow(boolean isShow) {
-        headerHolder.tvBgRight.setVisibility(isShow ? VISIBLE : GONE);
+        mHeaderHolder.tvBgRight.setVisibility(isShow ? VISIBLE : GONE);
     }
 
 
@@ -296,13 +297,13 @@ public class HeaderLayout extends RelativeLayout {
      * @param imageRes 为0 可不传 默认是关闭
      */
     public void setLeftBar(int imageRes) {
-        headerHolder.llClose.setVisibility(VISIBLE);
-        headerHolder.ivClose.setVisibility(VISIBLE);
+        mHeaderHolder.llClose.setVisibility(VISIBLE);
+        mHeaderHolder.ivClose.setVisibility(VISIBLE);
         if (imageRes != 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                headerHolder.ivClose.setBackground(null);
+                mHeaderHolder.ivClose.setBackground(null);
             }
-            headerHolder.ivClose.setImageResource(imageRes);
+            mHeaderHolder.ivClose.setImageResource(imageRes);
         }
     }
 
@@ -313,16 +314,16 @@ public class HeaderLayout extends RelativeLayout {
      * @param right     为null 可不传 默认是从相册选择
      */
     public void setHeaderBar(String titleText, String right) {
-        headerHolder.ivCommonLeft.setVisibility(VISIBLE);
-        headerHolder.tvCommonTitle.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setVisibility(VISIBLE);
-        headerHolder.ivQr.setVisibility(GONE);
-        headerHolder.tvCommonRight.setVisibility(VISIBLE);
+        mHeaderHolder.ivCommonLeft.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonTitle.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setVisibility(VISIBLE);
+        mHeaderHolder.ivQr.setVisibility(GONE);
+        mHeaderHolder.tvCommonRight.setVisibility(VISIBLE);
 //        if (!StringUtils.isEmpty(right)) {
-//            headerHolder.tvCommonRight.setText(right);
+//            mHeaderHolder.tvCommonRight.setText(right);
 //        }
 
-        headerHolder.tvCommonTitle.setText(titleText);
+        mHeaderHolder.tvCommonTitle.setText(titleText);
     }
 
     /**
@@ -332,66 +333,66 @@ public class HeaderLayout extends RelativeLayout {
      * @param right     为null 可不传 默认是从相册选择
      */
     public void setWhiteHeaderBar(String titleText, String right) {
-        headerHolder.ivCommonLeft.setVisibility(VISIBLE);
-        headerHolder.tvCommonTitle.setVisibility(VISIBLE);
-        headerHolder.tvCommonRight.setVisibility(VISIBLE);
-        headerHolder.ivQr.setVisibility(GONE);
-        headerHolder.tvCommonRight.setVisibility(VISIBLE);
+        mHeaderHolder.ivCommonLeft.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonTitle.setVisibility(VISIBLE);
+        mHeaderHolder.tvCommonRight.setVisibility(VISIBLE);
+        mHeaderHolder.ivQr.setVisibility(GONE);
+        mHeaderHolder.tvCommonRight.setVisibility(VISIBLE);
 //        if (!StringUtils.isEmpty(right)) {
-//            headerHolder.tvCommonRight.setText(right);
+//            mHeaderHolder.tvCommonRight.setText(right);
 //        }
 
-        headerHolder.tvCommonTitle.setText(titleText);
+        mHeaderHolder.tvCommonTitle.setText(titleText);
     }
 
     public String getTitle() {
-        if (headerHolder.tvCommonTitle != null) {
-            return headerHolder.tvCommonTitle.getText().toString();
+        if (mHeaderHolder.tvCommonTitle != null) {
+            return mHeaderHolder.tvCommonTitle.getText().toString();
         }
         return "";
     }
 
     public void setTitle(String title) {
-        if (headerHolder.tvCommonTitle != null) {
-            headerHolder.tvCommonTitle.setText(title);
+        if (mHeaderHolder.tvCommonTitle != null) {
+            mHeaderHolder.tvCommonTitle.setText(title);
         }
     }
 
     public void setCommonTitle2(String title) {
 
-        if (headerHolder.tvCommonTitle2 != null) {
-            headerHolder.tvCommonTitle2.setVisibility(View.VISIBLE);
-            headerHolder.tvCommonTitle2.setText(title);
+        if (mHeaderHolder.tvCommonTitle2 != null) {
+            mHeaderHolder.tvCommonTitle2.setVisibility(View.VISIBLE);
+            mHeaderHolder.tvCommonTitle2.setText(title);
         }
     }
 
     public void setMiddleTitle(String title) {
-        if (headerHolder.tvMiddleTitle != null) {
-            headerHolder.tvMiddleTitle.setVisibility(View.VISIBLE);
-            headerHolder.tvMiddleTitle.setText(title);
+        if (mHeaderHolder.tvMiddleTitle != null) {
+            mHeaderHolder.tvMiddleTitle.setVisibility(View.VISIBLE);
+            mHeaderHolder.tvMiddleTitle.setText(title);
         }
     }
 
 
     public void setCommonRightTitle2(String title) {
-        if (headerHolder.tvCommonRight2 != null) {
-            headerHolder.rlRightshare.setVisibility(VISIBLE);
-            headerHolder.tvCommonRight2.setVisibility(View.VISIBLE);
-            headerHolder.tvCommonRight2.setText(title);
-            headerHolder.ivShare.setVisibility(GONE);
+        if (mHeaderHolder.tvCommonRight2 != null) {
+            mHeaderHolder.rlRightshare.setVisibility(VISIBLE);
+            mHeaderHolder.tvCommonRight2.setVisibility(View.VISIBLE);
+            mHeaderHolder.tvCommonRight2.setText(title);
+            mHeaderHolder.ivShare.setVisibility(GONE);
         }
     }
 
 
     public void setRightBold() {
-        headerHolder.tvCommonRight.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+        mHeaderHolder.tvCommonRight.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
     }
 
     /**
      * 隐藏左边箭头
      */
     public void hideHeaderLeftButton() {
-        headerHolder.ivCommonLeft.setVisibility(GONE);
+        mHeaderHolder.ivCommonLeft.setVisibility(GONE);
     }
 
 
@@ -408,17 +409,17 @@ public class HeaderLayout extends RelativeLayout {
      * @param loadingText
      */
     public void showLoadingPage(String loadingText) {
-        if (null != progressPageView) {
-            progressPageView.setVisibility(VISIBLE);
+        if (null != mProgressPageView) {
+            mProgressPageView.setVisibility(VISIBLE);
             //
-//            progressHolder.rlLoading.setVisibility(VISIBLE);
-//            progressHolder.llDialog.setVisibility(VISIBLE);
-//            progressHolder.rlNodata.setVisibility(GONE);
+//            mProgressHolder.rlLoading.setVisibility(VISIBLE);
+//            mProgressHolder.llDialog.setVisibility(VISIBLE);
+//            mProgressHolder.rlNodata.setVisibility(GONE);
 //            //
-//            progressHolder.loadingView.setVisibility(VISIBLE);
-//            startAnima(progressHolder.loadingView);
-//            progressHolder.ivLoaderror.setVisibility(GONE);
-//            progressHolder.tvLoading.setText(loadingText);
+//            mProgressHolder.loadingView.setVisibility(VISIBLE);
+//            startAnima(mProgressHolder.loadingView);
+//            mProgressHolder.ivLoaderror.setVisibility(GONE);
+//            mProgressHolder.tvLoading.setText(loadingText);
         }
     }
 
@@ -432,15 +433,15 @@ public class HeaderLayout extends RelativeLayout {
     }
 
     public void hideLoadingPageDialog() {
-        if (null != progressPageView) {
-//            progressHolder.llDialog.setVisibility(GONE);
+        if (null != mProgressPageView) {
+//            mProgressHolder.llDialog.setVisibility(GONE);
         }
     }
 
 
     public void showLoadingPageDialog() {
-        if (null != progressPageView) {
-//            progressHolder.llDialog.setVisibility(GONE);
+        if (null != mProgressPageView) {
+//            mProgressHolder.llDialog.setVisibility(GONE);
         }
     }
 
@@ -448,8 +449,8 @@ public class HeaderLayout extends RelativeLayout {
      * 加载成功，隐藏加载页
      */
     public void dismissLoadingPage() {
-        if (null != progressPageView) {
-            progressPageView.setVisibility(GONE);
+        if (null != mProgressPageView) {
+            mProgressPageView.setVisibility(GONE);
         }
     }
 
@@ -464,29 +465,29 @@ public class HeaderLayout extends RelativeLayout {
      * 网络异常，展示重新加载按钮。
      */
     public void showErrorPage(int imgResID, String errorText) {
-//        if (null != progressPageView) {
-//            progressPageView.setVisibility(VISIBLE);
-//            //
-//            progressHolder.rlLoading.setVisibility(GONE);
-//            progressHolder.rlNodata.setVisibility(VISIBLE);
-//            progressHolder.rlReload.setVisibility(VISIBLE);
-//            progressHolder.tvReload.setVisibility(VISIBLE);
-//            progressHolder.btLoadding.setVisibility(GONE);
-//            //
-//            if (0 != imgResID) {
-//                progressHolder.ivNodata.setImageResource(imgResID);
-//            }
-//            if (!StringUtils.isNullOrEmpty(errorText)) {
-//                progressHolder.tvMsg.setText(errorText);
-//            }
-//        }
+        if (null != mProgressPageView) {
+            mProgressPageView.setVisibility(VISIBLE);
+            //
+            mProgressHolder.rlLoading.setVisibility(GONE);
+            mProgressHolder.rlNodata.setVisibility(VISIBLE);
+            mProgressHolder.rlReload.setVisibility(VISIBLE);
+            mProgressHolder.tvReload.setVisibility(VISIBLE);
+            mProgressHolder.btLoadding.setVisibility(GONE);
+            //
+            if (0 != imgResID) {
+                mProgressHolder.ivNodata.setImageResource(imgResID);
+            }
+            if (!StringUtils.isNullOrEmpty(errorText)) {
+                mProgressHolder.tvMsg.setText(errorText);
+            }
+        }
     }
 
     /**
      * 返回无数据，展示未找到相关数据
      */
     public void showNoDatasPage() {
-//        showNoDatasPage(R.mipmap-xxhdpi.ic_nodata, StringUtils.getResString(R.string.nodata));
+        showNoDatasPage(R.mipmap.ic_nodata, StringUtils.getResString(R.string.nodata));
     }
 
     /**
@@ -495,27 +496,27 @@ public class HeaderLayout extends RelativeLayout {
      * @param noDatasText
      */
     public void showNoDatasPage(int imgResID, String noDatasText) {
-        if (null != progressPageView) {
-//            progressPageView.setVisibility(VISIBLE);
-//            //
-//            progressHolder.rlLoading.setVisibility(GONE);
-//            progressHolder.rlNodata.setVisibility(VISIBLE);
-//            progressHolder.rlReload.setVisibility(GONE);
-//            //
-//            if (0 != imgResID) {
-//                progressHolder.ivNodata.setImageResource(imgResID);
+        if (null != mProgressPageView) {
+            mProgressPageView.setVisibility(VISIBLE);
+            //
+            mProgressHolder.rlLoading.setVisibility(GONE);
+            mProgressHolder.rlNodata.setVisibility(VISIBLE);
+            mProgressHolder.rlReload.setVisibility(GONE);
+            //
+            if (0 != imgResID) {
+                mProgressHolder.ivNodata.setImageResource(imgResID);
             }
-//            if (!StringUtils.isNullOrEmpty(noDatasText)) {
-//                progressHolder.tvMsg.setText(noDatasText);
-//            }
+            if (!StringUtils.isNullOrEmpty(noDatasText)) {
+                mProgressHolder.tvMsg.setText(noDatasText);
+            }
         }
-//    }
-
-    public HeaderHolder getHeaderHolder() {
-        return headerHolder;
     }
 
-    static class ProgressHolder extends BaseHolder {
+    public HeaderHolder getHeaderHolder() {
+        return mHeaderHolder;
+    }
+
+    static class ProgressHolder extends BaseViewHolder {
         @BindView(R2.id.loadingview)
         ImageView loadingView;
         @BindView(R2.id.iv_loaderror)
@@ -544,7 +545,7 @@ public class HeaderLayout extends RelativeLayout {
         }
     }
 
-    public class HeaderHolder extends BaseHolder {
+    public class HeaderHolder extends BaseViewHolder {
         @BindView(R2.id.iv_common_left)
         public ImageView ivCommonLeft;
         @BindView(R2.id.ll_common_left)
@@ -579,7 +580,6 @@ public class HeaderLayout extends RelativeLayout {
         public TextView tvCommonRight2;
         @BindView(R2.id.iv_share)
         public ImageView ivShare;
-        public View view;
         @BindView(R2.id.rl_right_share)
         public RelativeLayout rlRightshare;
         @BindView(R2.id.rl_right)
@@ -606,7 +606,6 @@ public class HeaderLayout extends RelativeLayout {
 
         public HeaderHolder(View view) {
             super(view);
-            this.view = view;
             expandViewTouchDelegate(ivQr, dip2px(20), dip2px(10), dip2px(10), dip2px(10));
         }
 
@@ -640,4 +639,10 @@ public class HeaderLayout extends RelativeLayout {
         return (int) (dip * scale + 0.5f);
     }
 
+    public void onDestory(){
+        if(mProgressHolder !=null)
+            mProgressHolder.unBind();
+        if(mHeaderHolder !=null)
+            mHeaderHolder.unBind();
+    }
 }

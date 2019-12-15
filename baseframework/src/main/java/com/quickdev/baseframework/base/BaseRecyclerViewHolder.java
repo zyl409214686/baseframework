@@ -6,11 +6,11 @@ import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class BaseHolder extends RecyclerView.ViewHolder {
+public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder {
 
     private Unbinder bind;
 
-    public BaseHolder(View view) {
+    public BaseRecyclerViewHolder(View view) {
         super(view);
         if (null != view)
             bind = ButterKnife.bind(this, view);
