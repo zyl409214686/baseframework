@@ -40,17 +40,17 @@ public class MainActivity extends BaseActivity<BasePresenter, BaseModel> {
     }
 
     @Override
-    protected void setContentViewBefore(Bundle savedInstanceState) {
+    public void setContentViewBefore(Bundle savedInstanceState) {
 
     }
 
     @Override
-    protected int getLayoutResId() {
+    public int getLayoutResId() {
         return R.layout.activity_main;
     }
 
     @Override
-    protected HEADER_TYPE getHeaderType() {
+    public HEADER_TYPE getHeaderType() {
         return TYPE_HEADER;
     }
 
@@ -77,13 +77,14 @@ public class MainActivity extends BaseActivity<BasePresenter, BaseModel> {
     }
 
     @Override
-    protected boolean isRegisteredEventBus() {
+    public boolean isRegisteredEventBus() {
         return true;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onReceiveStickyEvent(EventMessage event) {
         if(event.getCode() == EventMessageConstants.EVENT_A){
+            getSupportFragmentManager().beginTransaction().add(R.id.fl_container,  TestFragment.newInstance()).commit();
             Toast.makeText(mContext, "receive EVENT_A evnet and currentThread is:"+Thread.currentThread().getName(), Toast.LENGTH_SHORT).show();
         }
     }

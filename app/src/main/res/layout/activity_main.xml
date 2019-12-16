@@ -9,11 +9,22 @@
         android:id="@+id/bt_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:elevation="1dp"
+        android:text="Hello World!" />
+
     <Button
         android:id="@+id/bt_eventbus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="bt_eventbus_test"/>
+        android:elevation="1dp"
+        android:text="bt_eventbus_test" />
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="2dp">
+
+    </FrameLayout>
 </RelativeLayout>

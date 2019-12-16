@@ -19,8 +19,10 @@ import android.widget.FrameLayout;
 import com.quickdev.baseframework.base.interfaces.OnBackground;
 import com.quickdev.baseframework.base.interfaces.OnHeaderClickListener;
 import com.quickdev.baseframework.base.interfaces.OnMainThread;
+import com.quickdev.baseframework.base.interfaces.IBase;
 import com.quickdev.baseframework.base.view.HeaderLayout;
 import com.quickdev.baseframework.base.view.LoadingDialog;
+import com.quickdev.baseframework.utils.EventBusUtils;
 import com.quickdev.baseframework.utils.StatusBarUtils;
 import com.quickdev.baseframework.utils.ThreadPoolManager;
 import com.quickdev.baseframework.utils.TypeUtil;
@@ -28,7 +30,7 @@ import com.quickdev.baseframework.utils.TypeUtil;
 import butterknife.ButterKnife;
 
 
-public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel> extends Fragment implements BaseView {
+public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel> extends Fragment implements BaseView, IBase {
     protected Activity mContext;
     protected View contentView;
     protected HeaderLayout headerLayout;
@@ -42,33 +44,19 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     protected static final int TYPE_NOHEADER_STATUSBAR = 4;
     protected static final int TYPE_NOHEADER_STATUSBAR_PROGRESS = 5;
     protected static final int TYPE_BLUE_HEADER = 6;//沉浸式 蓝色背景头部
-    protected static int TYPE = TYPE_NORMAL;
 
 
     private View view;
-
-    protected abstract void processData();
-
-    protected abstract int setLayout();
-
 
     public T mPresenter;
     public E mModel;
 
 
-    protected abstract int getLayoutResId();
+    public void setContentViewBefore(Bundle savedInstanceState) {
 
-    protected abstract BaseActivity.HEADER_TYPE getHeaderType();
-
-    protected boolean isRegisteredEventBus() {
-        return false;
     }
 
-    public void setType(int TYPE) {
-        this.TYPE = TYPE;
-    }
-
-    protected BaseFragment() {
+    public BaseFragment() {
         mContext = getActivity();
     }
 
@@ -126,7 +114,8 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = setView(inflater, setLayout(), getHeaderType());
+        setContentViewBefore(savedInstanceState);
+        view = setView(inflater, getLayoutResId(), getHeaderType());
         ButterKnife.bind(this, view);
         if (this instanceof BaseView && mPresenter != null) mPresenter.setVM(this, mModel);
         return view;
@@ -135,7 +124,7 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        processData();
+        setContentViewAfter(savedInstanceState);
     }
 
     protected View setView(LayoutInflater inflater, int layoutResId, BaseActivity.HEADER_TYPE type) {
@@ -440,6 +429,11 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         loadingDialog.show(text);
     }
 
+    @Override
+    public void showLoadingDialog(String text, boolean isCancelable) {
+
+    }
+
     public void dismissLoadingDialog() {
         if (null != loadingDialog) {
             loadingDialog.dismiss();
@@ -498,5 +492,21 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         }, true);
 
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (isRegisteredEventBus())
+            EventBusUtils.register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (isRegisteredEventBus())
+            EventBusUtils.unregister(this);
+    }
+
 
 }

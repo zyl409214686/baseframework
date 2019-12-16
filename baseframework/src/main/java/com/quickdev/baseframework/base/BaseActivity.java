@@ -13,6 +13,7 @@ import com.quickdev.baseframework.R;
 import com.quickdev.baseframework.base.interfaces.OnBackground;
 import com.quickdev.baseframework.base.interfaces.OnHeaderClickListener;
 import com.quickdev.baseframework.base.interfaces.OnMainThread;
+import com.quickdev.baseframework.base.interfaces.IBase;
 import com.quickdev.baseframework.base.view.HeaderLayout;
 import com.quickdev.baseframework.base.view.LoadingDialog;
 import com.quickdev.baseframework.utils.EventBusUtils;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 
 //import com.umeng.message.PushAgent;
 
-public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel> extends AppCompatActivity implements BaseView {
+public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel> extends AppCompatActivity implements BaseView, IBase {
     protected Context mContext;
     private HeaderLayout mHeaderLayout;
     protected LoadingDialog mLoadingDialog;
@@ -78,6 +79,10 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         }
     }
 
+    public void setContentViewBefore(Bundle savedInstanceState){
+
+    }
+
     private void initMvp() {
         mPresenter = TypeUtil.getT(this, 0);
         mModel = TypeUtil.getT(this, 1);
@@ -87,31 +92,16 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     @Override
     protected void onStart() {
         super.onStart();
-        if(isRegisteredEventBus())
+        if (isRegisteredEventBus())
             EventBusUtils.register(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(isRegisteredEventBus())
+        if (isRegisteredEventBus())
             EventBusUtils.unregister(this);
     }
-
-    protected abstract int getLayoutResId();
-
-    protected abstract HEADER_TYPE getHeaderType();
-
-    protected boolean isRegisteredEventBus() {
-        return false;
-    }
-
-    protected abstract void setContentViewAfter(Bundle savedInstanceState);
-
-    protected void setContentViewBefore(Bundle savedInstanceState){
-
-    }
-
 
     @Override
     protected void onResume() {
@@ -524,7 +514,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     protected void onDestroy() {
         super.onDestroy();
         dismissLoadingDialog();
-        if(mHeaderLayout!=null) {
+        if (mHeaderLayout != null) {
             mHeaderLayout.onDestory();
         }
         if (null != mPresenter) {
