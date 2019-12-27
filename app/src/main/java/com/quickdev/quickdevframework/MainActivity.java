@@ -10,12 +10,14 @@ import com.quickdev.baseframework.base.BaseModel;
 import com.quickdev.baseframework.base.BasePresenter;
 import com.quickdev.baseframework.bean.EventMessage;
 import com.quickdev.baseframework.utils.EventBusUtils;
+import com.quickdev.baseframework.utils.LogUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.observers.DisposableObserver;
 
 import static com.quickdev.baseframework.base.BaseActivity.HEADER_TYPE.TYPE_HEADER;
 
@@ -35,6 +37,23 @@ public class MainActivity extends BaseActivity<BasePresenter, BaseModel> {
             @Override
             public void onClick(View v) {
                 mTestDialog.show(getSupportFragmentManager(), "testdialog");
+                LogUtils.d("getTop is requesting");
+                new DappModel().getTop(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        LogUtils.d(s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.d(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        LogUtils.d("getTop is onComplete");
+                    }
+                });
             }
         });
     }
@@ -69,6 +88,23 @@ public class MainActivity extends BaseActivity<BasePresenter, BaseModel> {
                 else{
                     mTestDialog.dismiss();
                 }
+                LogUtils.d("getTop is requesting");
+                new DappModel().getTop(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        LogUtils.d(s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.d(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        LogUtils.d("getTop is onComplete");
+                    }
+                });
                 break;
             case R.id.bt_eventbus:
                 EventBusUtils.post(new EventMessage<>(EventMessageConstants.EVENT_A, "EventData"));

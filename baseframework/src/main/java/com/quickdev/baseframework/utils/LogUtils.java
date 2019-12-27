@@ -11,34 +11,9 @@ import com.quickdev.baseframework.BuildConfig;
 public class LogUtils {
 
     /**
-     * 日志输出级别NONE
-     */
-    public static final int LEVEL_NONE = 0;
-    /**
-     * 日志输出级别V
-     */
-    public static final int LEVEL_VERBOSE = 1;
-    /**
-     * 日志输出级别D
-     */
-    public static final int LEVEL_DEBUG = 2;
-    /**
-     * 日志输出级别I
-     */
-    public static final int LEVEL_INFO = 3;
-    /**
-     * 日志输出级别W
-     */
-    public static final int LEVEL_WARN = 4;
-    /**
-     * 日志输出级别E
-     */
-    public static final int LEVEL_ERROR = 5;
-
-    /**
      * 日志输出时的TAG
      */
-    private static String mTag = "Tron";
+    private static final String DEFAULT_TAG = "ThisApplication";
 
     /**
      * 是否允许输出log
@@ -58,36 +33,31 @@ public class LogUtils {
      * 以级别为 v 的形式输出LOG
      */
     public static void v(String msg) {
-        if (mDebuggable) {
-            Log.v(mTag, msg);
-        }
+        v(DEFAULT_TAG, msg);
     }
 
     /**
      * 以级别为 v 的形式输出LOG
      */
-    public static void v(String mTag, String msg) {
+    public static void v(String tag, String msg) {
         if (mDebuggable) {
-            Log.v(mTag, msg);
+            Log.v(tag, msg);
         }
     }
 
     /**
      * 以级别为 d 的形式输出LOG
      */
-    public static void d(String msg) {
-        if (mDebuggable) {
-            Log.d(mTag, msg);
-
-        }
+    public static void d(String tag) {
+        d(DEFAULT_TAG, tag);
     }
 
     /**
      * 以级别为 d 的形式输出LOG
      */
-    public static void d(String mTag, String msg) {
+    public static void d(String tag, String msg) {
         if (mDebuggable) {
-            Log.d(mTag, msg);
+            Log.d(tag, msg);
 
         }
     }
@@ -96,17 +66,15 @@ public class LogUtils {
      * 以级别为 i 的形式输出LOG
      */
     public static void i(String msg) {
-        if (mDebuggable) {
-            Log.i(mTag, msg);
-        }
+        i(DEFAULT_TAG, msg);
     }
 
     /**
      * 以级别为 i 的形式输出LOG
      */
-    public static void i(String mTag, String msg) {
+    public static void i(String tag, String msg) {
         if (mDebuggable) {
-            Log.i(mTag, msg);
+            Log.i(tag, msg);
         }
     }
 
@@ -114,17 +82,15 @@ public class LogUtils {
      * 以级别为 w 的形式输出LOG
      */
     public static void w(String msg) {
-        if (mDebuggable) {
-            Log.w(mTag, msg);
-        }
+        w(DEFAULT_TAG, msg);
     }
 
     /**
      * 以级别为 w 的形式输出LOG
      */
-    public static void w(String mTag, String msg) {
+    public static void w(String tag, String msg) {
         if (mDebuggable) {
-            Log.w(mTag, msg);
+            Log.w(tag, msg);
         }
     }
 
@@ -133,7 +99,7 @@ public class LogUtils {
      */
     public static void w(Throwable tr) {
         if (mDebuggable) {
-            Log.w(mTag, "", tr);
+            Log.w(DEFAULT_TAG, "", tr);
         }
     }
 
@@ -142,7 +108,7 @@ public class LogUtils {
      */
     public static void w(String msg, Throwable tr) {
         if (mDebuggable && null != msg) {
-            Log.w(mTag, msg, tr);
+            Log.w(DEFAULT_TAG, msg, tr);
         }
     }
 
@@ -150,35 +116,36 @@ public class LogUtils {
      * 以级别为 e 的形式输出LOG
      */
     public static void e(String msg) {
-        if (mDebuggable) {
-            Log.e(mTag, msg);
-        }
+        e(DEFAULT_TAG, msg);
     }
 
     /**
      * 以级别为 e 的形式输出LOG
      */
     public static void e(String mTag, String msg) {
-        if (mDebuggable) {
-            Log.e(mTag, msg);
-        }
+        e(mTag, msg);
     }
 
     /**
      * 以级别为 e 的形式输出Throwable
      */
     public static void e(Throwable tr) {
-        if (mDebuggable) {
-            Log.e(mTag, "", tr);
-        }
+        e(DEFAULT_TAG, "", tr);
     }
 
     /**
      * 以级别为 e 的形式输出LOG信息和Throwable
      */
     public static void e(String msg, Throwable tr) {
+        e(DEFAULT_TAG, msg, tr);
+    }
+
+    /**
+     * 以级别为 e 的形式输出LOG信息和Throwable
+     */
+    public static void e(String tag, String msg, Throwable tr) {
         if (mDebuggable && null != msg) {
-            Log.e(mTag, msg, tr);
+            Log.e(tag, msg, tr);
         }
     }
 

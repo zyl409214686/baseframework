@@ -36,4 +36,6 @@ public interface HttpAPI {
     @GET("/dapphouseapp/activity&lan={lan}&address={address}")
     Observable<DappRecommendOutput> getDappRecommend(@Path("lan") String lan, @Path("address") String address);
 
+    @GET("top250")
+    Observable<String> getTop250 (@Query("start") int start , @Query("count") int count);
 }
