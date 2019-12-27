@@ -1,6 +1,7 @@
 package com.quickdev.baseframework.network;
 
 
+import com.quickdev.baseframework.utils.AppContextUtil;
 import com.quickdev.baseframework.utils.MobileInfoUtil;
 
 import java.net.SocketException;
@@ -16,23 +17,19 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class IHttpClient {
     private static final int DEFAULT_TIMEOUT = 8;
 
-//
-//    private static class VersionNested {
-//        static String version;
-//
-//        static {
-//            try {
-//                version = AppContextUtil.getContext().getPackageManager().getPackageInfo(AppContextUtil.getContext().getPackageName(), 0).versionName;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+
+    private static class VersionNested {
+        static String version;
+        static {
+            try {
+                version = AppContextUtil.getContext().getPackageManager().getPackageInfo(AppContextUtil.getContext().getPackageName(), 0).versionName;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static OkHttpClient.Builder getHttpClientBuilder() {
-//        File cacheFile = new File(HttpCache.getRootCacheDir(), "cache");
-//        Cache cache = new Cache(cacheFile, 1024 * 1024 * 100);//100Mb
-
         OkHttpClient.Builder Ibuilder = new OkHttpClient.Builder();
         Ibuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
@@ -55,9 +52,6 @@ public class IHttpClient {
 
 
     public static OkHttpClient.Builder getHttpClientBuilder1() {
-//        File cacheFile = new File(HttpCache.getRootCacheDir(), "cache");
-//        Cache cache = new Cache(cacheFile, 1024 * 1024 * 100);//100Mb
-
         OkHttpClient.Builder Ibuilder = new OkHttpClient.Builder();
         Ibuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
@@ -75,8 +69,6 @@ public class IHttpClient {
 
     private static Request.Builder getBuilder(Interceptor.Chain chain) {
         Request org = chain.request();
-//        String lang = (String) SpUtils.getParam("f_TronKey", AppContextUtil.getContext(),
-//                AppContextUtil.getContext().getString(R.string.language_key), "1");
         String macAddress;
         try {
             macAddress = MobileInfoUtil.getMacAddress();
@@ -86,13 +78,8 @@ public class IHttpClient {
         }
         Request.Builder builder = org.newBuilder()
                 .addHeader("System", "Android")
-//                .addHeader("Version", VersionNested.version)
+                .addHeader("Version", VersionNested.version)
                 .addHeader("DeviceID", macAddress);
-//                .addHeader("Lang", lang);
-
-//        String baseUrl = org.url().toString();
-////        AppContextUtil.getContext().getSharedPreferences();
-//        baseUrl.replaceAll("base&url","");
         return builder;
     }
 }

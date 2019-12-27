@@ -34,6 +34,7 @@ public class OkHttpManager {
     private static final int DEFAULT_TIMEOUT = 8;
     static private OkHttpManager mOkhttpManager = null;
     private InputStream mTrustrCertificate;
+    private boolean mVerifyHttps = true;
 
     private static class VersionNested {
         static String version;
@@ -138,13 +139,13 @@ public class OkHttpManager {
             SSLSocketFactory sslSocketFactory;
             X509TrustManager trustManager = null;
             try {
-//                if (BuildConfig.VERIFY_HTTPS) {
+                if (mVerifyHttps) {
 //                    Log.d(TAG, "VERIFY_HTTPS:" + BuildConfig.VERIFY_HTTPS);
                     trustManager = trustManagerForCertificates();
                     trustManagers = new TrustManager[]{trustManager};
-//                } else {
-//                    trustManagers = getDefaultTrustManager();
-//                }
+                } else {
+                    trustManagers = getDefaultTrustManager();
+                }
                 SSLContext sslContext = SSLContext.getInstance("TLS");
                 sslContext.init(null, trustManagers, null);
                 sslSocketFactory = sslContext.getSocketFactory();
@@ -165,13 +166,13 @@ public class OkHttpManager {
                         return response;
 
                     });
-//            if (!BuildConfig.VERIFY_HTTPS) {
+            if (!mVerifyHttps) {
 //                Log.d(TAG, "VERIFY_HTTPS:" + BuildConfig.VERIFY_HTTPS);
                 okHttpClientBuilder.sslSocketFactory(sslSocketFactory);
                 okHttpClientBuilder.hostnameVerifier((hostname, session) -> true);
-//            } else {
-//                okHttpClientBuilder.sslSocketFactory(sslSocketFactory, trustManager);
-//            }
+            } else {
+                okHttpClientBuilder.sslSocketFactory(sslSocketFactory, trustManager);
+            }
             okHttpClient = okHttpClientBuilder.build();
 
         } else {
@@ -184,11 +185,6 @@ public class OkHttpManager {
 
     private static Request.Builder getBuilder(Interceptor.Chain chain) {
         Request org = chain.request();
-//        String lang = (String) SpUtils.getParam("f_TronKey", AppContextUtil.getContext(),
-//                AppContextUtil.getContext().getString(R.string.language_key), "1");
-//
-//        String chainName = (String) SpUtils.getParam("f_Tron", AppContextUtil.getContext(),
-//                AppContextUtil.getContext().getString(R.string.chain_name_key), "MainChain");
         String macAddress;
         try {
             macAddress = MobileInfoUtil.getMacAddress();
@@ -209,15 +205,7 @@ public class OkHttpManager {
                 .addHeader("System", "Android")
                 .addHeader("Version", VersionNested.version)
                 .addHeader("DeviceID", macAddress)
-//                .addHeader("Lang", lang)
-//                .addHeader("chain", chainName)
                 .addHeader("packageName", packageName);
-
-
-//        String baseUrl = org.url().toString();
-////        AppContextUtil.getContext().getSharedPreferences();
-
-//        baseUrl.replaceAll("base&url","");
         return builder;
     }
 }
