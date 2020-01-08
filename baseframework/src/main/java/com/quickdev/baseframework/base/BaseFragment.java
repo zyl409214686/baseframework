@@ -3,6 +3,7 @@ package com.quickdev.baseframework.base;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,14 +17,17 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.quickdev.baseframework.R;
 import com.quickdev.baseframework.base.interfaces.OnBackground;
 import com.quickdev.baseframework.base.interfaces.OnHeaderClickListener;
 import com.quickdev.baseframework.base.interfaces.OnMainThread;
 import com.quickdev.baseframework.base.interfaces.IBase;
 import com.quickdev.baseframework.base.view.HeaderLayout;
+import com.quickdev.baseframework.base.view.IToast;
 import com.quickdev.baseframework.base.view.LoadingDialog;
 import com.quickdev.baseframework.utils.EventBusUtils;
 import com.quickdev.baseframework.utils.StatusBarUtils;
+import com.quickdev.baseframework.utils.StringUtils;
 import com.quickdev.baseframework.utils.ThreadPoolManager;
 import com.quickdev.baseframework.utils.TypeUtil;
 
@@ -438,6 +442,65 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         if (null != loadingDialog) {
             loadingDialog.dismiss();
         }
+    }
+
+
+    protected void Toast(final String text) {
+        if (StringUtils.isNullOrEmpty(text)) {
+            return;
+        }
+        mContext.runOnUiThread(() -> IToast.getIToast().show(text));
+
+    }
+
+    protected void Toast(final int resId) {
+        mContext.runOnUiThread(() -> IToast.getIToast().show(resId));
+
+    }
+
+    public void ToastAsBottom(final int resId) {
+        mContext.runOnUiThread(() -> IToast.getIToast().showAsBottomn(resId));
+    }
+
+    protected void ToastAsBottom(final int resId, final int resId2) {
+        mContext.runOnUiThread(() -> IToast.getIToast().showAsBottomnDouble(resId, resId2));
+    }
+
+
+    @Override
+    public void go(Class clazz) {
+        Intent intent = new Intent(mContext, clazz);
+        startActivity(intent);
+    }
+
+    @Override
+    public void go(Class clazz, Bundle bundle) {
+        Intent intent = new Intent(mContext, clazz);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void go(Intent intent) {
+        startActivity(intent);
+    }
+
+    @Override
+    public void goForResult(Class clazz, int requestCode) {
+        Intent intent = new Intent(mContext, clazz);
+        startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void goForResult(Class clazz, int requestCode, Bundle bundle) {
+        Intent intent = new Intent(mContext, clazz);
+        intent.putExtras(bundle);
+        mContext.startActivityForResult(intent, requestCode, bundle);
+    }
+
+    @Override
+    public void exit() {
+        mContext.finish();
     }
 
 

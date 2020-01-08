@@ -5,6 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+
+
+
     <Button
         android:id="@+id/bt_test"
         android:layout_width="wrap_content"
@@ -13,12 +17,34 @@
         android:elevation="1dp"
         android:text="Hello World!" />
 
+
+
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/bt_eventbus"
+        android:layout_marginTop="30dp"
+        />
+
     <Button
         android:id="@+id/bt_eventbus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="1dp"
         android:text="bt_eventbus_test" />
+
+    <Button
+        android:id="@+id/bt_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bt_eventbus"
+        android:layout_marginTop="10dp"
+        android:elevation="1dp"
+        android:text="获取权限" />
+
+
 
     <FrameLayout
         android:id="@+id/fl_container"

@@ -1,6 +1,8 @@
 package com.quickdev.baseframework.base;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,9 +17,11 @@ import com.quickdev.baseframework.base.interfaces.OnHeaderClickListener;
 import com.quickdev.baseframework.base.interfaces.OnMainThread;
 import com.quickdev.baseframework.base.interfaces.IBase;
 import com.quickdev.baseframework.base.view.HeaderLayout;
+import com.quickdev.baseframework.base.view.IToast;
 import com.quickdev.baseframework.base.view.LoadingDialog;
 import com.quickdev.baseframework.utils.EventBusUtils;
 import com.quickdev.baseframework.utils.StatusBarUtils;
+import com.quickdev.baseframework.utils.StringUtils;
 import com.quickdev.baseframework.utils.ThreadPoolManager;
 import com.quickdev.baseframework.utils.TypeUtil;
 
@@ -79,7 +83,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         }
     }
 
-    public void setContentViewBefore(Bundle savedInstanceState){
+    public void setContentViewBefore(Bundle savedInstanceState) {
 
     }
 
@@ -127,6 +131,44 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
             mHeaderLayout.setHeaderClickListener(onHeaderClickListener);
         }
     }
+
+    @Override
+    public void go(Class clazz) {
+        Intent intent = new Intent(this, clazz);
+        startActivity(intent);
+    }
+
+    @Override
+    public void go(Class clazz, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void go(Intent intent) {
+        startActivity(intent);
+    }
+
+    @Override
+    public void goForResult(Class clazz, int requestCode) {
+        Intent intent = new Intent(this, clazz);
+        startActivityForResult(intent, requestCode);
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void goForResult(Class clazz, int requestCode, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, requestCode, bundle);
+    }
+
+    @Override
+    public void exit() {
+        finish();
+    }
+
 
     public void setTitle(String title) {
         if (null != mHeaderLayout) {
@@ -509,6 +551,28 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
             mLoadingDialog.dismiss();
         }
     }
+
+
+    protected void Toast(final String text) {
+        if (StringUtils.isNullOrEmpty(text)) {
+            return;
+        }
+        runOnUiThread(() -> IToast.getIToast().show(text));
+
+    }
+
+    protected void Toast(final int resId) {
+        runOnUiThread(() -> IToast.getIToast().show(resId));
+    }
+
+    public void ToastAsBottom(final int resId) {
+        runOnUiThread(() -> IToast.getIToast().showAsBottomn(resId));
+    }
+
+    protected void ToastAsBottom(final int resId, final int resId2) {
+        runOnUiThread(() -> IToast.getIToast().showAsBottomnDouble(resId, resId2));
+    }
+
 
     @Override
     protected void onDestroy() {
