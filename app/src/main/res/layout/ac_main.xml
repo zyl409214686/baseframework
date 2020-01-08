@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_marginBottom="60dp"></FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_tab"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="#11135DCD"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <com.quickdev.quickdevframework.customview.tabview.ITabView
+            android:id="@+id/home_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            app:iconHeight="10dp"
+            app:iconWidth="14dp"
+            app:icons="@mipmap/assets_normal"
+            app:selectIcon="@mipmap/assets_selected"
+            app:titleColor="@color/black_02"
+            app:titleSelectColor="@color/blue_13"
+            app:titleSize="11dp"
+            app:titleTop="10dp"
+            app:titles="家庭" />
+
+
+        <com.quickdev.quickdevframework.customview.tabview.ITabView
+            android:id="@+id/room_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            app:iconHeight="10dp"
+            app:iconWidth="16dp"
+            app:icons="@mipmap/market_default"
+            app:selectIcon="@mipmap/market_selected"
+            app:titleColor="@color/black_02"
+            app:titleSelectColor="@color/blue_13"
+            app:titleSize="11dp"
+            app:titleTop="8dp"
+            app:titles="房间" />
+
+
+        <com.quickdev.quickdevframework.customview.tabview.ITabView
+            android:id="@+id/market_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            app:iconHeight="12dp"
+            app:iconWidth="12dp"
+            app:icons="@mipmap/dapp_normal"
+            app:selectIcon="@mipmap/dapp_selected"
+            app:titleColor="@color/black_02"
+            app:titleSelectColor="@color/blue_13"
+            app:titleSize="11dp"
+            app:titleTop="8dp"
+            app:titles="电商" />
+
+
+        <com.quickdev.quickdevframework.customview.tabview.ITabView
+            android:id="@+id/scene_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            app:iconHeight="10dp"
+            app:iconWidth="18dp"
+            app:icons="@mipmap/my_normal"
+            app:selectIcon="@mipmap/my_selected"
+            app:titleColor="@color/black_02"
+            app:titleSelectColor="@color/blue_13"
+            app:titleSize="11dp"
+            app:titleTop="8dp"
+            app:titles="场景" />
+
+
+        <com.quickdev.quickdevframework.customview.tabview.ITabView
+            android:id="@+id/my_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            app:iconHeight="10dp"
+            app:iconWidth="18dp"
+            app:icons="@mipmap/my_normal"
+            app:selectIcon="@mipmap/my_selected"
+            app:titleColor="@color/black_02"
+            app:titleSelectColor="@color/blue_13"
+            app:titleSize="11dp"
+            app:titleTop="8dp"
+            app:titles="我的" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>
