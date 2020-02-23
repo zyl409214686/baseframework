@@ -2,21 +2,21 @@ package com.quickdev.baseframework.network;
 
 
 import android.content.Context;
-import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.quickdev.baseframework.utils.AppContextUtil;
 import com.quickdev.baseframework.utils.LogUtils;
 import com.quickdev.baseframework.utils.NetUtils;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -26,7 +26,6 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by 眼神 on 2018/3/27.
@@ -36,9 +35,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitFactory {
     private static Context mContext;
     public String TAG = "RetrofitFactory";
-    //TODO 填写自己的包名
-    public static final String CACHE_NAME = "yourApkName";
-    public static final String BASE_URL = "https://api.douban.com/v2/movie/";
+    // 填写自己的包名
+    public static final String CACHE_NAME = "com.insight.weather";
+    public static final String BASE_URL = IRequest.BASE_URL;
 
     private static final int DEFAULT_CONNECT_TIMEOUT = 30;
     private static final int DEFAULT_WRITE_TIMEOUT = 30;
@@ -87,7 +86,7 @@ public class RetrofitFactory {
                 return response;
             }
         };
-        okHttpBuilder.cache(cache).addInterceptor(cacheInterceptor);
+//        okHttpBuilder.cache(cache).addInterceptor(cacheInterceptor);
 
 
         /**
@@ -98,11 +97,11 @@ public class RetrofitFactory {
             public Response intercept(Chain chain) throws IOException {
                 Request originalRequest = chain.request();
                 Request.Builder requestBuilder = originalRequest.newBuilder()
-                        .addHeader("Accept-Encoding", "gzip")
+//                        .addHeader("Accept-Encoding", "gzip")
                         .addHeader("Accept", "application/json")
                         .addHeader("Content-Type", "application/json; charset=utf-8")
                         .method(originalRequest.method(), originalRequest.body());
-                requestBuilder.addHeader("Authorization", "Bearer ");//添加请求头信息，服务器进行token有效性验证
+//                requestBuilder.addHeader("Authorization", "Bearer ");//添加请求头信息，服务器进行token有效性验证
                 Request request = requestBuilder.build();
                 return chain.proceed(request);
             }
@@ -114,10 +113,8 @@ public class RetrofitFactory {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                LogUtils.d(message);
+                LogUtils.d("message:"+message);
             }
-
-
         });
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         //设置 Debug Log 模式
@@ -133,13 +130,17 @@ public class RetrofitFactory {
         //错误重连
         okHttpBuilder.retryOnConnectionFailure(true);
 
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
 
         retrofit = new Retrofit.Builder()
                 .client(okHttpBuilder.build())
-                .addConverterFactory(GsonConverterFactory.create())//json转换成JavaBean
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(BASE_URL)
+                .addConverterFactory(LenientGsonConverterFactory.create(gson))//json转换成JavaBean
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
+
     }
 
     //在访问HttpMethods时创建单例
